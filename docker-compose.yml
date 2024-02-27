@@ -6,3 +6,25 @@ services:
     build:
       context: .
       dockerfile: BookTrack.Api/Dockerfile
+    depends_on:
+      - "bookTrack.db"
+    networks:
+      - aspnetcoreapp-network
+
+  bookTrack.db:
+    image: postgres
+    container_name: database
+    environment:
+        POSTGRES_DB: booktrack
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+    networks:
+      - aspnetcoreapp-network
+    volumes:
+      - ./.containers/database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+networks:
+  aspnetcoreapp-network:
+    driver: bridge

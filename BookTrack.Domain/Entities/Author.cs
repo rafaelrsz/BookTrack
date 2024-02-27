@@ -14,7 +14,15 @@ public class Author : Entity
   }
 
   public string Name { get; private set; } 
+
   public string Nationality { get; private set; } 
+
   public DateTime BirthDate { get; private set; }
+
   public IReadOnlyCollection<Book> Books => _books;
+
+  public void AddBook(Book book)
+  {
+    _books.Add(book);
+  }
 }
