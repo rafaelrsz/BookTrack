@@ -4,7 +4,7 @@ using BookTrack.Domain.Repositories;
 using BookTrack.Domain.Shared;
 
 namespace BookTrack.Application.Commands.Authors.Create;
-internal sealed class CreateAuthorCommandHandler : ICommandHandler<CreateAuthorCommand>
+internal sealed class CreateAuthorCommandHandler : ICommandHandler<CreateAuthorCommand, Guid>
 {
   private readonly IAuthorRepository _repository;
   private readonly IUnitOfWork _unitOfWork;
@@ -15,16 +15,16 @@ internal sealed class CreateAuthorCommandHandler : ICommandHandler<CreateAuthorC
   }
 
 
-  public async Task<Result> Handle(CreateAuthorCommand request, CancellationToken cancellationToken)
+  public async Task<Result<Guid>> Handle(CreateAuthorCommand request, CancellationToken cancellationToken)
   {
-    var author = new Author(request.name,
-                    request.nationality,
-                    request.birthDate);
+    var author = new Author(request.Name,
+                    request.Nationality,
+                    request.BirthDate);
 
     _repository.Add(author);
 
     await _unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
-    return Result.Success();
+    return Result.Success(author.Id);
   }
 }

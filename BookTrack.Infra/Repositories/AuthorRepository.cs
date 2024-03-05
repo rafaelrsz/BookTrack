@@ -1,6 +1,7 @@
 ﻿using BookTrack.Domain.Entities;
 using BookTrack.Domain.Repositories;
 using BookTrack.Infra.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookTrack.Infra.Repositories;
 public class AuthorRepository : IAuthorRepository
@@ -15,8 +16,13 @@ public class AuthorRepository : IAuthorRepository
     _context.Authors.Add(author);
   }
 
-  public Task<Author?> GetByIdAsync(Guid authorId)
+  public async Task<Author?> GetByIdAsync(Guid authorId)
   {
-    throw new NotImplementedException();
+    return await _context.Authors.FirstOrDefaultAsync(x => x.Id == authorId).ConfigureAwait(false);
+  }
+
+  public async Task<bool> IsNameUniqueAsync(string name)
+  {
+    return !(await _context.Authors.AnyAsync(x => x.Name == name).ConfigureAwait(false));
   }
 }

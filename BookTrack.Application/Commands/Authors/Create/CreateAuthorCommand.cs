@@ -2,7 +2,7 @@
 
 namespace BookTrack.Application.Commands.Authors.Create;
 public sealed record CreateAuthorCommand(
-  string name,
-  string nationality,
-  DateTime birthDate
-  ) : ICommand;
+  string Name,
+  string Nationality,
+  DateTime BirthDate
+  ) : ICommand<Guid>;

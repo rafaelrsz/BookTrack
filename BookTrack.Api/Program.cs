@@ -1,6 +1,10 @@
 using BookTrack.Api.Endpoints;
 using BookTrack.Api.Extentions;
+using BookTrack.Application.Middlewares;
+using BookTrack.Application.PipelineBehaviors;
 using BookTrack.Infra.Data;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -33,6 +37,10 @@ builder
             .AsImplementedInterfaces()
             .WithScopedLifetime());
 
+builder.Services.AddTransient<ValidationMappingMiddleware>();
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddValidatorsFromAssembly(BookTrack.Application.AssemblyReference.Assembly);
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment()) { 
@@ -42,6 +50,7 @@ if (app.Environment.IsDevelopment()) {
 }
 
 app.MapAuthorEndpoints();
+app.UseMiddleware<ValidationMappingMiddleware>();
 
 app.UseHttpsRedirection();
 
