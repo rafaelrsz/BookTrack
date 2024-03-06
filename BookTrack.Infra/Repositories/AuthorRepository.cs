@@ -16,13 +16,33 @@ public class AuthorRepository : IAuthorRepository
     _context.Authors.Add(author);
   }
 
+  public async Task DeleteAsync(Guid authorId)
+  {
+    var entity = await GetByIdAsync(authorId).ConfigureAwait(false);
+
+    if (entity is null)
+      return;
+
+    _context.Remove(entity);
+  }
+
   public async Task<Author?> GetByIdAsync(Guid authorId)
   {
     return await _context.Authors.FirstOrDefaultAsync(x => x.Id == authorId).ConfigureAwait(false);
   }
 
+  public async Task<Author?> GetByIdAsyncAsNoTracking(Guid authorId)
+  {
+    return await _context.Authors.AsNoTracking().FirstOrDefaultAsync(x => x.Id == authorId).ConfigureAwait(false);
+  }
+
   public async Task<bool> IsNameUniqueAsync(string name)
   {
     return !(await _context.Authors.AnyAsync(x => x.Name == name).ConfigureAwait(false));
+  }
+
+  public void Update(Author author)
+  {
+    _context.Authors.Update(author);
   }
 }

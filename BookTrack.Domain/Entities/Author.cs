@@ -6,7 +6,7 @@ public class Author : Entity
 {
   private readonly List<Book> _books = [];
 
-  public Author(string name, string nationality, DateTime birthDate)
+  public Author(string name, string nationality, DateTime birthDate, Guid id = default) : base(id)
   {
     Name = name;
     Nationality = nationality;

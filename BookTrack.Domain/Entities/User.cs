@@ -4,7 +4,7 @@ namespace BookTrack.Domain.Entities;
 public class User : Entity
 {
   private readonly List<Loan> _loans = [];
-  public User(string name, string password, string email)
+  public User(string name, string password, string email, Guid id = default) : base(id)
   {
     Name = name;
     Password = password;

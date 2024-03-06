@@ -1,7 +1,8 @@
 ﻿using BookTrack.Application.Commands.Authors.Create;
+using BookTrack.Application.Commands.Authors.Delete;
+using BookTrack.Application.Commands.Authors.Update;
 using BookTrack.Application.Queries.Authors.GetById;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BookTrack.Api.Endpoints;
 
@@ -13,6 +14,8 @@ public static class AuthorsEndpoints
 
     group.MapGet("{id:guid}", GetById).WithName(nameof(GetById));
     group.MapPost("", CreateAuthor).WithName(nameof(CreateAuthor));
+    group.MapPut("{id:guid}", UpdateAuthor).WithName(nameof(UpdateAuthor));
+    group.MapDelete("{id:guid}", DeleteAuthor).WithName(nameof(DeleteAuthor));
   }
 
   public static async Task<IResult> GetById(Guid id, ISender sender)
@@ -30,5 +33,23 @@ public static class AuthorsEndpoints
     return response.IsSuccess ? Results.CreatedAtRoute(nameof(GetById),
                                                        new { id = response.Value },
                                                        response.Value) : Results.BadRequest();
+  }
+
+  public static async Task<IResult> DeleteAuthor(Guid id, ISender sender)
+  {
+    var command = new DeleteAuthorCommand(id);
+
+    var response = await sender.Send(command).ConfigureAwait(false);
+
+    return response.IsSuccess ? Results.NoContent() : Results.BadRequest();
+  }
+
+  public static async Task<IResult> UpdateAuthor(Guid id, UpdateAuthorRequest request, ISender sender)
+  {
+    var command = new UpdateAuthorCommand(id, request.Name, request.Nationality, request.BirthDate);
+
+    var response = await sender.Send(command).ConfigureAwait(false);
+
+    return response.IsSuccess ? Results.NoContent() : Results.BadRequest();
   }
 }

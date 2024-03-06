@@ -7,5 +7,11 @@ public interface IAuthorRepository
 
   public Task<Author?> GetByIdAsync(Guid authorId);
 
+  public Task<Author?> GetByIdAsyncAsNoTracking(Guid authorId);
+
   public Task<bool> IsNameUniqueAsync(string name);
+
+  public Task DeleteAsync(Guid authorId);
+
+  public void Update(Author author);
 }

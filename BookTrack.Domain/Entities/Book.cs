@@ -5,7 +5,7 @@ namespace BookTrack.Domain.Entities;
 
 public class Book : Entity
 {
-  public Book(string iSBN, string name, string language, int publicationYear, int pageNumber, Guid authorId, Guid publisherId)
+  public Book(string iSBN, string name, string language, int publicationYear, int pageNumber, Guid authorId, Guid publisherId, Guid id = default) : base(id)
   {
     ISBN = iSBN;
     Name = name;

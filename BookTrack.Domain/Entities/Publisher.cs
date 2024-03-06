@@ -5,7 +5,7 @@ namespace BookTrack.Domain.Entities;
 public class Publisher : Entity
 {
   private readonly List<Book> _books = [];
-  public Publisher(string name, string phone, int foundationDate)
+  public Publisher(string name, string phone, int foundationDate, Guid id = default) : base(id)
   {
     Name = name;
     Phone = phone;
